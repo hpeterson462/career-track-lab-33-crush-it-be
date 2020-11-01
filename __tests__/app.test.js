@@ -79,4 +79,21 @@ describe('crush-it routes', () => {
       });
   });
 
+  it('updates a route by id', async () => {
+    const route = await Route.insert({
+      location: 'Smith Rock',
+      name: 'Voyage of the Cowdog',
+      rating: '5.8+',
+      notes: 'Good warm-up.'
+    });
+
+    return request(app)
+      .put(`/api/v1/routes/${route.id}`)
+      .send({
+        location: 'Smith Rock',
+        name: 'Voyage of the Cowdog',
+        rating: '5.8+',
+        notes: 'So so.'
+      })
+  })
 });
