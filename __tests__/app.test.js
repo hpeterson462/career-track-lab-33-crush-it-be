@@ -33,18 +33,21 @@ describe('crush-it routes', () => {
   it('gets all routes', async () => {
     const routes = await Promise.all([
       {
+        id: 1,
         location: 'Rattlesnake',
         name: 'Arabesque',
         rating: '5.10a',
         notes: 'Scary split legged crux!'
       },
       {
+        id: 2,
         location: 'Smith Rock',
         name: 'Purple Headed Warrior',
         rating: '5.7',
         notes: 'Nice warm up.'
       },
       {
+        id: 3,
         location: 'Emigrant Lake',
         name: 'Aqua Man',
         rating: '5.10b',
@@ -58,6 +61,21 @@ describe('crush-it routes', () => {
         routes.forEach(route => {
           expect(res.body).toContainEqual(route);
         });
+      });
+  });
+
+  it('gets a route by id', async () => {
+    const route = await Route.insert({
+      location: 'Rattlesnake',
+      name: 'Arabesque',
+      rating: '5.10a',
+      notes: 'Scary split legged crux!'
+    });
+
+    return request(app)
+      .get(`/api/v1/routes/${route.id}`)
+      .then(res => {
+        expect(res.body).toEqual(route);
       });
   });
 
