@@ -2,6 +2,7 @@ const fs = require('fs');
 const pool = require('../lib/utils/pool');
 const request = require('supertest');
 const app = require('../lib/app');
+const Route = require('../lib/models/route');
 
 describe('crush-it routes', () => {
   beforeEach(() => {
@@ -16,6 +17,48 @@ describe('crush-it routes', () => {
         name: 'Voyage of the Cowdog',
         rating: '5.8+',
         notes: 'Good warm-up.'
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          id: expect.any(String),
+          userId: expect.any(String),
+          location: 'Smith Rock',
+          name: 'Voyage of the Cowdog',
+          rating: '5.8+',
+          notes: 'Good warm-up.'
+        });
       });
   });
+
+  it('gets all routes', async () => {
+    const routes = await Promise.all([
+      {
+        location: 'Rattlesnake',
+        name: 'Arabesque',
+        rating: '5.10a',
+        notes: 'Scary split legged crux!'
+      },
+      {
+        location: 'Smith Rock',
+        name: 'Purple Headed Warrior',
+        rating: '5.7',
+        notes: 'Nice warm up.'
+      },
+      {
+        location: 'Emigrant Lake',
+        name: 'Aqua Man',
+        rating: '5.10b',
+        notes: 'Better than the Poison Oak Wall.'
+      }
+    ].map(route => Route.insert(route)));
+
+    return request(app)
+      .get('/api/v1/routes')
+      .then(res => {
+        routes.forEach(route => {
+          expect(res.body).toContainEqual(route);
+        });
+      });
+  });
+
 });
