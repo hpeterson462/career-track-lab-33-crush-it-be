@@ -94,6 +94,21 @@ describe('crush-it routes', () => {
         name: 'Voyage of the Cowdog',
         rating: '5.8+',
         notes: 'So so.'
-      })
-  })
+      });
+  });
+
+  it('deletes a route by id', async () => {
+    const route = await Route.insert({
+      location: 'Smith Rock',
+      name: 'Voyage of the Cowdog',
+      rating: '5.8+',
+      notes: 'So so.'
+    });
+
+    return request(app)
+      .delete(`/api/v1/routes/${route.id}`)
+      .then(res => {
+        expect(res.body).toEqual(route);
+      });
+  });
 });
