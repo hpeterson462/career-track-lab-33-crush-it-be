@@ -9,7 +9,7 @@ CREATE TABLE users (
 
 CREATE TABLE routes (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  user_id BIGINT REFERENCES users(id),
+  users_id BIGINT REFERENCES users(id),
   location TEXT NOT NULL,
   name TEXT NOT NULL,
   rating TEXT NOT NULL,
